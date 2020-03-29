@@ -1,5 +1,5 @@
 build/
-data.json/
+data.json
 frontend/
 experiment.js
 

@@ -24,6 +24,6 @@ import Database from "utils/database";
     if(targetNode && sourceNode) {
       await NodeAPI.addLink(sourceNode, targetNode, document, "popular_user_nodes");
       console.log(`Link has been created: [${document.id_str} ]${sourceNode.id_str} > ${targetNode.id_str}`);
-    }else console.log("No Source Node Found!");
+    }else console.log(`[${document.id_str}] No Source Node Found!`);
   }
 })(1000)
