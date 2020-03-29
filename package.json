@@ -29,6 +29,7 @@
     "moment": "^2.24.0",
     "mongodb": "^3.5.5",
     "regenerator-runtime": "^0.13.3",
+    "serve": "^11.3.0",
     "twitter-lite": "^0.9.4"
   },
   "browserslist": {

@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.15.0/d3.min.js" ></script>
+    <style>
+      canvas {
+        display: block;
+      }
+      .node {
+        stroke: #fff;
+        stroke-width: 1.5px;
+      }
+      .link {
+        stroke: #999;
+        stroke-opacity: .6;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas></canvas>
+    <script>
+      (async () => {
+        const canvas = document.querySelector("canvas");
+        const context = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        drawCanvas(canvas.width, canvas.height);
+
+        async function drawCanvas(width, height){
+          const simulation = d3.forceSimulation();
+          simulation.force("link", d3.forceLink().id((d) => {
+            return d.id
+          }));
+          simulation.force("charge", d3.forceManyBody());
+          simulation.force("center", d3.forceCenter(width / 2, height / 2));
+
+          const { nodes, links } = await d3.json("data.json");
+          simulation.nodes(nodes).on("tick", () => {
+            context.clearRect(0, 0, width, height);
+            context.beginPath();
+            links.forEach((link) => {
+              context.moveTo(link.source.x, link.source.y);
+              context.lineTo(link.target.x, link.target.y);
+            });
+            context.strokeStyle = "#aaa";
+            context.stroke();
+
+            context.beginPath();
+            nodes.forEach((node) => {
+              context.moveTo(node.x + 3, node.y);
+              context.arc(node.x, node.y, 3, 0, 2 * Math.PI);
+            })
+            context.fill();
+            context.strokeStyle = "#fff";
+            context.stroke();
+          });
+
+          simulation.force("link").links(links);
+          d3.select(canvas).call(
+            d3.drag().container(canvas)
+            .subject(() => simulation.find(d3.event.x, d3.event.y))
+            .on("start", () => {
+              if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+              d3.event.subject.fx = d3.event.subject.x;
+              d3.event.subject.fy = d3.event.subject.y;
+            })
+            .on("drag", () => {
+              d3.event.subject.fx = d3.event.x;
+              d3.event.subject.fy = d3.event.y;
+            })
+            .on("end", () => {
+              if (!d3.event.active) simulation.alphaTarget(0);
+              d3.event.subject.fx = null;
+              d3.event.subject.fy = null;
+            })
+          )
+        }
+      })()
+    </script>
+  </body>
+</html>
