@@ -26,12 +26,12 @@
         drawCanvas(canvas.width, canvas.height);
 
         async function drawCanvas(width, height){
-          const simulation = d3.forceSimulation();
-          simulation.force("link", d3.forceLink().id((d) => {
+          const simulation = d3.forceSimulation()
+          .force("link", d3.forceLink().id((d) => {
             return d.id
-          }));
-          simulation.force("charge", d3.forceManyBody());
-          simulation.force("center", d3.forceCenter(width / 2, height / 2));
+          }))
+          .force("charge", d3.forceManyBody())
+          .force("center", d3.forceCenter(width / 2, height / 2))
 
           const { nodes, links } = await d3.json("data.json");
           simulation.nodes(nodes).on("tick", () => {
@@ -47,7 +47,8 @@
             context.beginPath();
             nodes.forEach((node) => {
               context.moveTo(node.x + 3, node.y);
-              context.arc(node.x, node.y, 3, 0, 2 * Math.PI);
+              context.arc(node.x, node.y, 5, 0, 5 * Math.PI);
+              if(node.numberOfLinks >= 0) context.fillText(node.name, node.x + 10, node.y + 5);
             })
             context.fill();
             context.strokeStyle = "#fff";

@@ -26,4 +26,4 @@ import Database from "utils/database";
       console.log(`Link has been created: [${document.id_str} ]${sourceNode.id_str} > ${targetNode.id_str}`);
     }else console.log("No Source Node Found!");
   }
-})(10)
+})(1000)
