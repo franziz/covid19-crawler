@@ -33,7 +33,8 @@ import TwitterClient from "utils/twitter";
     .on("ping", (() => console.log("ping")))
     .on("error", ((err) => console.log(err)))
     .on("end", async () => {
-      await Database.getInstance().close();
+      const client = await Database.getInstance();
+      await client.close();
       console.log("end");
     })
 })()
